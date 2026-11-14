@@ -58,12 +58,6 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 	@Override
 	public void add(int index, E element) {
 		if(index < 0 || index > count) throw new IndexOutOfBoundsException();
-		if(index == count) {
-			// Adding to rear. 
-			// Don't loop because for loop would leave the bounds of the list
-			addToRear(element);
-			return;
-		}
 		if(index == 0) {
 			// Adding to front. 
 			// Don't loop because loop only adds after the index given
@@ -71,13 +65,12 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 			return;
 		}
 		LinearNode<E> current = front;
-		for(int i=0; i<index;i++) {
+		for(int i=0; i<index - 1;i++) { 
+			// addElement inserts after the element given, so it should add after
+			// index - 1
 			current = current.getNext();
 		}
 		addElement(current, element);
-
-		count++;
-		modCount++;
 	}
 
 	@Override
@@ -128,6 +121,8 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 			current = current.getNext();
 		}
 		current.setElement(element);
+
+		modCount++;
 	}
 
 	@Override
@@ -252,6 +247,9 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 
 		@Override
 		public boolean hasNext() {
+			if (iterModCount != modCount) {
+				throw new ConcurrentModificationException();
+			}
 			return next != null;
 		}
 
@@ -289,7 +287,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 			removeElement(previous, current);
 
 			// Allow the next call to next() to continue from the same position
-			current = null;
+			current = previous;
 
 			// Update the iterator's modification count
 			iterModCount = modCount;

@@ -19,7 +19,7 @@ public class ListTester {
 		goodList, badList, arrayList, singleLinkedList, doubleLinkedList
 	};
 	// TODO: THIS IS WHERE YOU CHOOSE WHICH LIST TO TEST
-	private final static ListToUse LIST_TO_USE = ListToUse.arrayList;
+	private final static ListToUse LIST_TO_USE = ListToUse.singleLinkedList;
 
 	// possible results expected in tests
 	private enum Result {
@@ -1124,7 +1124,7 @@ public class ListTester {
 			printTest(scenarioName+"_iterNextNext_testIterRemove", testIterRemove(WrapIt.prep(scenario.build()).next().next().getIterator(), Result.NoException));
 				// tests after calling next and then next and then next on an iterator
 			printTest(scenarioName+"_iterNextNextNext_testIterHasNext",testIterHasNext(WrapIt.prep(scenario.build()).next().next().next().getIterator(), Result.False));
-			printTest(scenarioName+"_iterNextNextNext_testNext",testIterNext(WrapIt.prep(scenario.build()).next().next().next().getIterator(),contents[3], Result.NoSuchElement));
+			printTest(scenarioName+"_iterNextNextNext_testNext",testIterNext(WrapIt.prep(scenario.build()).next().next().next().getIterator(), null, Result.NoSuchElement));
 			printTest(scenarioName+"_iterNextNextNext_testRemove",testIterRemove(WrapIt.prep(scenario.build()).next().next().next().getIterator(),Result.NoException));
 
 			// ListIterator
